@@ -6,6 +6,8 @@ from fastapi import HTTPException
 import models
 import schemas
 import uuid
+import math
+import models
 
 
 def create_order(order_request: schemas.CreateOrderRequest, db: Session):
@@ -61,6 +63,43 @@ def create_order(order_request: schemas.CreateOrderRequest, db: Session):
 
     return order
 
+
+def get_orders_paginated(db: Session, page: int = 1, limit: int = 10):
+    """Get orders with pagination"""
+    if page < 1:
+        page = 1
+    if limit < 1:
+        limit = 10
+
+    total = db.query(models.Order).count()
+    pages = math.ceil(total / limit) if total > 0 else 1
+
+    if page > pages:
+        return {
+            "items": [],
+            "total": total,
+            "page": page,
+            "limit": limit,
+            "pages": pages
+        }
+
+    offset = (page - 1) * limit
+
+    items = (
+        db.query(models.Order)
+        .order_by(models.Order.created_at.desc())  # opcional, orden reciente primero
+        .offset(offset)
+        .limit(limit)
+        .all()
+    )
+
+    return {
+        "items": items,
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": pages
+    }
 
 def get_all_orders(db: Session):
     """Get all orders"""

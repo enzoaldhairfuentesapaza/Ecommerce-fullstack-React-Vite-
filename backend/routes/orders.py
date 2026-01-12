@@ -1,7 +1,7 @@
 """
 Order API routes
 """
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -12,6 +12,11 @@ from controllers import orders as order_controller
 
 router = APIRouter(prefix="/api/orders", tags=["orders"])
 
+
+@router.get("/paginated")
+def get_orders_paginated(page: int = Query(1, ge=1), limit: int = Query(10, ge=1), db: Session = Depends(get_db)):
+    """ Get orders with pagination  """
+    return order_controller.get_orders_paginated(db, page, limit)
 
 @router.post("", response_model=schemas.OrderResponse)
 def create_order(

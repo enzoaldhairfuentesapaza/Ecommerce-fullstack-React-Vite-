@@ -67,3 +67,13 @@ class OrderResponse(BaseModel):
 
 class CreateOrderRequest(BaseModel):
     cart_items: List[CartItem]
+
+class PaginatedProducts(BaseModel):
+    items: List[Product]
+    total: int
+    page: int
+    limit: int
+    pages: int
+
+    class Config:
+        orm_mode = True

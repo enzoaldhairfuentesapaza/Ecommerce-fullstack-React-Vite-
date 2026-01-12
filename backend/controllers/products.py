@@ -3,10 +3,81 @@ Product business logic
 """
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+from typing import Optional
+
 import models
 import schemas
 import uuid
 
+import math
+import models
+
+
+def list_products(
+    db: Session,
+    search: Optional[str] = None,
+    min_price: Optional[float] = None,
+    max_price: Optional[float] = None,
+    sort_by: str = "name",
+    order: str = "asc",
+    page: int = 1,
+    limit: int = 10
+) -> schemas.PaginatedProducts:
+    
+    """
+    List products with optional search, price filtering, sorting, and pagination.
+    Returns a PaginatedProducts object.
+    """
+
+    query = db.query(models.Product)
+
+    if search:
+        query = query.filter(
+            (models.Product.name.ilike(f"%{search}%")) |
+            (models.Product.description.ilike(f"%{search}%"))
+        )
+
+    if min_price is not None:
+        query = query.filter(models.Product.price >= min_price)
+    if max_price is not None:
+        query = query.filter(models.Product.price <= max_price)
+
+    sort_column = getattr(models.Product, sort_by, models.Product.name)
+    if order == "desc":
+        sort_column = sort_column.desc()
+    query = query.order_by(sort_column)
+
+    total = query.count()
+    items = query.offset((page - 1) * limit).limit(limit).all()
+    pages = math.ceil(total / limit) if total > 0 else 1
+
+    return schemas.PaginatedProducts(
+        items=items,
+        total=total,
+        page=page,
+        limit=limit,
+        pages=pages
+    )
+
+
+
+def get_products_paginated(db: Session, page: int = 1, limit: int = 10) -> schemas.PaginatedProducts:
+    """
+    Basic pagination without filters.
+    Useful for Challenge 04.
+    """
+    query = db.query(models.Product)
+    total = query.count()
+    items = query.offset((page - 1) * limit).limit(limit).all()
+    pages = math.ceil(total / limit) if total > 0 else 1
+
+    return schemas.PaginatedProducts(
+        items=items,
+        total=total,
+        page=page,
+        limit=limit,
+        pages=pages
+    )
 
 def get_all_products(db: Session):
     """Get all products from database"""

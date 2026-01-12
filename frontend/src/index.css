@@ -4,6 +4,9 @@
   box-sizing: border-box;
 }
 
+/* =========================================================
+   VARIABLES
+========================================================= */
 :root {
   --primary-color: #2563eb;
   --primary-dark: #1d4ed8;
@@ -48,12 +51,19 @@ body {
   font-size: 1.75rem;
 }
 
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+
 .header-buttons {
   display: flex;
   gap: 1rem;
 }
 
 .cart-button,
+.modal-btn-primary,
 .orders-button {
   padding: 0.75rem 1.5rem;
   background: var(--primary-color);
@@ -66,6 +76,9 @@ body {
   transition: background 0.2s;
 }
 
+
+.modal-btn-primary:hover,
+.modal-btn-secondary:hover,
 .cart-button:hover,
 .orders-button:hover {
   background: var(--primary-dark);
@@ -78,6 +91,21 @@ body {
 .orders-button:hover {
   background: #059669;
 }
+
+.modal-btn-secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.modal-btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+
+/* =========================================================
+   PANELES: CARRITO Y ÓRDENES
+========================================================= */
+
 
 .cart-panel,
 .orders-panel {
@@ -93,6 +121,10 @@ body {
   margin-bottom: 1.5rem;
   color: var(--text-color);
 }
+
+/* =========================================================
+   CARRITO DE COMPRAS
+========================================================= */
 
 .cart-items {
   display: flex;
@@ -190,6 +222,12 @@ body {
   background: #059669;
 }
 
+
+/* =========================================================
+   HISTORIAL DE ÓRDENES
+========================================================= */
+
+
 .orders-list {
   display: flex;
   flex-direction: column;
@@ -247,6 +285,10 @@ body {
   text-align: right;
   font-size: 1.125rem;
 }
+
+/* =========================================================
+   GRID DE PRODUCTOS
+========================================================= */
 
 .products-grid {
   display: grid;
@@ -308,27 +350,11 @@ body {
   font-size: 0.875rem;
 }
 
-.product-card button {
-  margin: 0 1rem 1rem;
-  padding: 0.75rem;
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: background 0.2s;
-}
 
-.product-card button:hover:not(.disabled) {
-  background: var(--primary-dark);
-}
+/* =========================================================
+   ESTADOS GLOBALES
+========================================================= */
 
-.product-card button.disabled {
-  background: var(--text-light);
-  cursor: not-allowed;
-}
 
 .loading,
 .error {
@@ -342,6 +368,12 @@ body {
 .error {
   color: var(--danger-color);
 }
+
+
+/* =========================================================
+   RESPONSIVE DESIGN
+========================================================= */
+
 
 @media (max-width: 768px) {
   .header {

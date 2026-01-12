@@ -8,6 +8,8 @@ from database import engine, get_db, Base
 from routes import products, cart, orders
 from controllers.products import init_sample_products
 
+
+
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
